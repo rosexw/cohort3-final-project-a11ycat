@@ -37,18 +37,24 @@ const Map = withScriptjs(
           {props.markers.map(marker => {
             const infoWindow = props.activeMarker === marker.key && (
               <InfoWindow onCloseClick={props.onInfoClose}>
-                <div>
+                <div style={{backgroundColor: 'yelllow'}}>
                   <h1 style={{ color: 'black' }}>{marker.name}</h1>
                   <Ratings avgRating={marker.avgRating} />
                 </div>
               </InfoWindow>
             );
+
+            // const image = {
+            //   url: '/../../img/marker@2x.png',
+            //   scaledSize: new google.maps.Size(31, 43)
+            // };
             return (
               <Marker
                 {...marker}
                 key={marker.key}
                 position={marker.position}
                 name={marker.name}
+                icon='blue_MarkerA.png'
                 onClick={() => props.onMarkerClick(marker.key)}
               >
                 {infoWindow}
