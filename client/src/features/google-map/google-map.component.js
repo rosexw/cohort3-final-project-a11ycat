@@ -3,9 +3,9 @@ import {
   withScriptjs,
   withGoogleMap,
   GoogleMap,
-  Marker,
-  InfoWindow
+  Marker
 } from 'react-google-maps';
+import InfoBox from 'react-google-maps/lib/components/addons/InfoBox';
 import { Ratings } from './map-rating.component';
 import { ToastContainer } from '../toast/toast.container';
 import { Page } from '../../ui-kit/page-style';
@@ -36,25 +36,22 @@ const Map = withScriptjs(
           <Marker title="User" position={props.coords} />
           {props.markers.map(marker => {
             const infoWindow = props.activeMarker === marker.key && (
-              <InfoWindow onCloseClick={props.onInfoClose}>
-                <div style={{backgroundColor: 'yelllow'}}>
-                  <h1 style={{ color: 'black' }}>{marker.name}</h1>
+
+              <InfoBox onCloseClick={props.onInfoClose}>
+                <div>
+                  <h1>{marker.name}</h1>
                   <Ratings avgRating={marker.avgRating} />
                 </div>
-              </InfoWindow>
+              </InfoBox>
             );
 
-            // const image = {
-            //   url: '/../../img/marker@2x.png',
-            //   scaledSize: new google.maps.Size(31, 43)
-            // };
             return (
               <Marker
                 {...marker}
                 key={marker.key}
                 position={marker.position}
                 name={marker.name}
-                icon='blue_MarkerA.png'
+                icon='blue-dot.png'
                 onClick={() => props.onMarkerClick(marker.key)}
               >
                 {infoWindow}
