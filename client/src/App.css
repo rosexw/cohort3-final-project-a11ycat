@@ -7,26 +7,25 @@
   height: 80px;
 }
 
-.App-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
-  color: white;
-}
-
-.App-title {
-  font-size: 1.5em;
-}
-
-.App-intro {
-  font-size: large;
-}
 
 @keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .map {
   height: 300px;
+}
+
+.infoBox {
+  background-color: #fafaed;
+  color: #4a3d4d;
+  padding: 15px;
+  text-align: center;
+  border-radius: 10%;
+  box-shadow: 3px 3px 16px 0px #80808091;
 }
