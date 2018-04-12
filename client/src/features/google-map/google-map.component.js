@@ -51,7 +51,7 @@ const Map = withScriptjs(
                 key={marker.key}
                 position={marker.position}
                 name={marker.name}
-                icon='blue-dot.png'
+                icon='purple-icon.png'
                 onClick={() => props.onMarkerClick(marker.key)}
               >
                 {infoWindow}
