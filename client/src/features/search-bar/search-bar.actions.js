@@ -1,6 +1,6 @@
 import { SEARCH_BAR_TYPES } from './search-bar.types';
 import { toggleAutoComplete } from '../auto-complete-list/auto-complete-list.actions';
-import { ACTION_TYPES } from '../list-item/list-item.types';
+import { LIST_ITEM_ACTION_TYPES } from '../list-item/list-item.types';
 
 // Regular action creator: returns object
 export const updateSearchInput = searchString => {
@@ -23,7 +23,7 @@ export const addLocations = locations => {
 
 export const updateListItemLocations = locations => {
   return {
-    type: ACTION_TYPES.updateLocations,
+    type: LIST_ITEM_ACTION_TYPES.updateLocations,
     payload: {
       locations
     }
@@ -32,8 +32,7 @@ export const updateListItemLocations = locations => {
 
 export const fetchLocations = (searchString, lat, lng) => {
   const APIkey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
-
-  const URL = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${searchString}&types=establishment&location=${lat},${lng}&radius=500&strictbounds&key=${APIkey}
+  const URL = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${searchString}&location=${lat},${lng}&radius=500&types=establishment&key=${APIkey}
   `;
   return dispatch => {
     return fetch(URL)
@@ -58,9 +57,22 @@ export const textSearch = (inputText, lat, lng) => {
     return fetch(URL)
       .then(res => res.json())
       .then(data => {
-        const results = data.results.slice(0, 3).map(item => item.name);
+        const results = data.results.slice(0, 3).map(item => ({
+          name: item.name,
+          lat: item.geometry.location.lat,
+          lon: item.geometry.location.lng
+        }));
         dispatch(updateListItemLocations(results));
       })
       .catch(error => console.log(error));
+  };
+};
+
+export const errorNoInput = () => {
+  return {
+    type: SEARCH_BAR_TYPES.error,
+    payload: {
+      message: 'Ops... Please, enter a location name to search the place!'
+    }
   };
 };

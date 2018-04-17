@@ -1,46 +1,40 @@
-import React, { Component } from "react";
-import apiService from "../../shared/services/api-service";
-import { SearchBarContainer } from "../search-bar/search-bar.container";
-import { AutoCompleteListContainer } from "../auto-complete-list/auto-complete-list.container";
-import { LocationRatingContainer } from "../location-rating/location-rating.container";
-import { Header } from "../../ui-kit/header";
-
-export const defaultLocations = ["park", "coffee shop", "jungle"];
+import React, { Component } from 'react';
+import { ListItemContainer } from '../list-item/list-item.container';
+import { SearchBarContainer } from '../search-bar/search-bar.container';
+import { AutoCompleteListContainer } from '../auto-complete-list/auto-complete-list.container';
+import { Heading } from '../../ui-kit/heading';
+import { List } from '../../ui-kit/list';
+import { Page } from '../../ui-kit/page-style';
+import { LoadingIndicator } from '../list-item/list-loading.component';
 
 export class App extends Component {
   componentDidMount() {
-    apiService
-      .get("/someModels")
-      .then(function(response) {
-        console.log(response);
-      })
-      .catch(function(error) {
-        console.log(error);
-      });
-    this.props.getLocation();
+    this.locationCall();
   }
 
-  render() {
-    const { showAutoComplete } = this.props;
-    return (
-      <div className="App">
-        <Header headerText={"A11yCatz"} />
+  locationCall = async () => {
+    this.props.toggleLoading(true);
+    await this.props.getLocation();
+    this.props.fetchInitialPlaces(this.props.lat, this.props.lon);
+  };
 
+  render() {
+    const { showAutoComplete, listLocations, isLoading } = this.props;
+    return (
+      <Page>
         <SearchBarContainer />
         {showAutoComplete && <AutoCompleteListContainer />}
-
-        <div>
-          <br />
-          <br />
-          -------------------
-          <br />
-          <br />
-          This should be a new page, after clicking on "rate" button:
-          <br />
-          <br />
-          <LocationRatingContainer />
-        </div>
-      </div>
+        {!isLoading && <Heading> Nearby locations </Heading>}
+        {isLoading ? (
+          <LoadingIndicator />
+        ) : (
+          <List>
+            {listLocations.map((location, index) => (
+              <ListItemContainer key={index} location={location} />
+            ))}
+          </List>
+        )}
+      </Page>
     );
   }
 }

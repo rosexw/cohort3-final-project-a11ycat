@@ -1,16 +1,19 @@
-import React from "react";
-import { Button } from "../../ui-kit/button";
-import styled from "styled-components";
-import { variables } from "../../ui-kit/variables";
+import React from 'react';
+import { Button } from '../../ui-kit/button';
+import styled from 'styled-components';
+import { variables } from '../../ui-kit/variables';
+import { ToastContainer } from '../toast/toast.container';
 
 const Input = styled.input`
   display: flex;
   justify-content: space-between;
   width: 100%;
-  min-height: 30px;
+  min-height: 37px;
   border: none;
   padding-left: 10px;
   font-size: 1em;
+  font-family: 'Open Sans', sans-serif;  
+  border: 2px solid ${variables.colour.mediumPurple};
   &:focus {
     outline: none;
   }
@@ -20,15 +23,14 @@ const SearchContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin: 20px;
-  max-height: 36px;
-  border-radius: 5px;
-  border: 2px solid ${variables.colour.darkGrey};
+  margin: 20px 0px 0px 0px;
+  min-height: 36px;
 `;
 
 const SearchButton = Button.extend`
-  border-radius: 0 4px 4px 0;
   min-height: 36px;
+  margin-left: 20px;
+  margin-right: auto;
 `;
 
 export const SearchBar = ({
@@ -37,7 +39,8 @@ export const SearchBar = ({
   inputValue,
   textSearch,
   toggleAutoComplete,
-  userLocation
+  userLocation,
+  errorNoInput
 }) => {
   const handleChange = event => {
     let input = event.target.value;
@@ -46,19 +49,33 @@ export const SearchBar = ({
   };
 
   const handleClick = event => {
-    textSearch(inputValue, userLocation.lat, userLocation.lon);
-    updateSearchInput("");
-    toggleAutoComplete(false);
+    if (!inputValue.trim()) {
+      errorNoInput();
+    } else {
+      textSearch(inputValue, userLocation.lat, userLocation.lon);
+      updateSearchInput('');
+      toggleAutoComplete(false);
+    }
+  };
+
+  const handleKeyPress = event => {
+    if (event.key === 'Enter') {
+      handleClick(event);
+    }
   };
 
   return (
-    <SearchContainer>
-      <Input
-        onChange={handleChange}
-        placeholder="Location Name"
-        value={inputValue}
-      />
-      <SearchButton onClick={handleClick}>Search</SearchButton>
-    </SearchContainer>
+    <div>
+      <ToastContainer />
+      <SearchContainer>
+        <Input
+          onChange={handleChange}
+          onKeyPress={handleKeyPress}
+          placeholder="Location Name"
+          value={inputValue}
+        />
+        <SearchButton onClick={handleClick}>Search</SearchButton>
+      </SearchContainer>
+    </div>
   );
 };

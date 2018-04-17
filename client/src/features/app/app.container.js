@@ -1,26 +1,24 @@
-import React from 'react';
 import { connect } from 'react-redux';
 import { App } from './app.component';
 import { getLocation } from './app.actions';
+import {
+  fetchInitialPlaces,
+  toggleLoading
+} from '../list-item/list-item.actions';
 import '../../App.css';
-
-const _AppContainer = ({ showAutoComplete, listLocations, getLocation }) => (
-  <App
-    showAutoComplete={showAutoComplete}
-    listLocations={listLocations}
-    getLocation={getLocation}
-  />
-);
 
 const mapStateToProps = state => ({
   showAutoComplete: state.autoCompleteListReducer.showAutoComplete,
-  listLocations: state.listItemReducer.locations
+  listLocations: state.listItemReducer.locations,
+  lat: state.appReducer.userLocation.lat,
+  lon: state.appReducer.userLocation.lon,
+  isLoading: state.listItemReducer.isLoading
 });
 
 const mapDispatchToProps = {
-  getLocation
+  getLocation,
+  fetchInitialPlaces,
+  toggleLoading
 };
 
-export const AppContainer = connect(mapStateToProps, mapDispatchToProps)(
-  _AppContainer
-);
+export const AppContainer = connect(mapStateToProps, mapDispatchToProps)(App);

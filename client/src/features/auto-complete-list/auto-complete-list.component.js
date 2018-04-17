@@ -5,6 +5,7 @@ export const Item = styled.li`
   display: flex;
   justify-content: space-between;
   margin: 10px 30px;
+  color: #fefefd;
 `;
 
 export const Anchor = styled.a`
@@ -14,10 +15,16 @@ export const Anchor = styled.a`
 
 export class AutoCompleteList extends Component {
   handleClick = (e, index) => {
-    const { updateSearchInput, toggleAutoComplete } = this.props;
+    const {
+      updateSearchInput,
+      toggleAutoComplete,
+      textSearch,
+      userLocation
+    } = this.props;
     e.preventDefault();
     let value = this[index].props.value;
-    updateSearchInput(value);
+    textSearch(value, userLocation.lat, userLocation.lon);
+    updateSearchInput('');
     toggleAutoComplete(false);
   };
 
